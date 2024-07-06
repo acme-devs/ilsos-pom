@@ -1,0 +1,830 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>0fa744b1-1284-46c5-b23c-0eb98ea787e3</groupId>
+	<artifactId>ilsos-pom</artifactId>
+	<version>1.0.1</version>
+	<packaging>pom</packaging>
+
+	<!-- Anypoint Exchange documentation-->
+	<name>ilsos-pom</name>
+	<description>Parent POM for Mulesoft applications</description>
+
+	<properties>
+		<!-- Project properties -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<!-- Anypoint Exchange documentation 
+		<fields key="sourceCode">https://github.com/jpontdia/ilsos-pom/</fields>
+		<categories key="Asset type">Common</categories>
+		<tags>POM, Common</tags>
+        -->
+
+		<!--
+		https://docs.mulesoft.com/release-notes/mule-runtime/mule-esb 
+		https://docs.mulesoft.com/release-notes/mule-runtime/mule-4.6.0-release-notes
+		GovCloud Notes:
+		https://docs.mulesoft.com/release-notes/gov-cloud/gov-cloud-release-notes
+
+		Mule Runtime Patch Update Release Notes for Mule Apps on Runtime Fabric
+		https://docs.mulesoft.com/release-notes/runtime-fabric/runtime-fabric-runtimes-release-notes
+		 -->
+		<app.runtime>4.6.5</app.runtime>
+
+		<!-- Code coverage settings -->
+		<codecoverage.flow>20</codecoverage.flow>
+		<codecoverage.resource>0</codecoverage.resource>
+		<codecoverage.application>80</codecoverage.application>
+
+		<!-- Plugins -->
+		<munit-maven-plugin.version>3.1.0</munit-maven-plugin.version>
+		<maven-project-info-reports-plugin.version>3.5.0</maven-project-info-reports-plugin.version>
+		<maven-site-plugin.version>4.0.0-M14</maven-site-plugin.version>
+		<maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
+		<maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+		<maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
+		<exchange-mule-maven-plugin.version>0.0.23</exchange-mule-maven-plugin.version>
+		<versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
+		<mule-maven-plugin.version>4.2.0</mule-maven-plugin.version>
+
+		<!-- Basic connectors and plugins-->
+		<mule-http-connector.version>1.9.3</mule-http-connector.version>
+		<mule-apikit-module.version>1.10.4</mule-apikit-module.version>
+		<mule-tracing-module.version>1.1.0</mule-tracing-module.version>
+		<munit-tools.version>3.1.0</munit-tools.version>
+		<munit-runner.version>3.1.0</munit-runner.version>
+		<mule-validation-module.version>2.0.6</mule-validation-module.version>
+		<!-- Notes 2024-05-14 
+		Next dependency shows newer artifacts in repository https://repository.mulesoft.org/nexus/content/repositories/public/org/mule/weave/assertions/
+		From 1.3.0 to 2.7.0-20240430. This change in version is unusual.
+		In order to fix this problem, we will add ignore versions in versions-maven-plugin section.
+		In future updates, remove all this notes until have the correct next version
+		-->
+		<assertions.version>1.3.0</assertions.version>
+		<anypoint-mq-connector.version>4.0.7</anypoint-mq-connector.version>
+
+		<!--Mule Metrics Toolkit Application connectors-->
+		<error.handler.plugin.version>5.1.0</error.handler.plugin.version>
+		<mule-objectstore-connector.version>1.2.2</mule-objectstore-connector.version>
+		<mule-secure-configuration-property-module.version>1.2.7</mule-secure-configuration-property-module.version>
+		<mule-custom-metrics-extension.version>2.3.0</mule-custom-metrics-extension.version>
+		<mule-mongodb-connector.version>6.3.7</mule-mongodb-connector.version>
+		<mongodb-driver-legacy.version>4.9.1/</mongodb-driver-legacy.version>
+		<mule-file-connector.version>1.5.2</mule-file-connector.version>
+
+		<!-- Spring dependencies -->
+		<mule-spring-module.version>1.4.0</mule-spring-module.version>
+		<!-- spring-core is comprised of the following dependencies that will all be updates from this one version number:
+            org.springframework:spring-beans
+            org.springframework:spring-context
+            org.springframework:spring-core
+            org.springframework:spring-jdbc
+		-->
+		<spring-core.version>5.3.36</spring-core.version>
+		<spring-security.version>5.7.12</spring-security.version>
+
+		<!-- Logging dependencies -->
+		<slf4j-api.version>2.0.13</slf4j-api.version>
+		<log4j-core.version>2.23.1</log4j-core.version>
+		<logzio-log4j2-appender.version>1.0.19</logzio-log4j2-appender.version>
+		<logzio-sender.version>1.1.8</logzio-sender.version>
+		<splunk-library-javalogging.version>1.11.8</splunk-library-javalogging.version>
+
+		<!-- Database dependencies, Base connectors -->
+		<commons-dbcp2.version>2.12.0</commons-dbcp2.version>
+		<derby.version>10.14.3.0</derby.version>
+		<mule-db-connector.version>1.14.10</mule-db-connector.version>
+
+		<!-- Database dependencies, Microsoft SQL Server -->
+		<mssql-jdbc_auth.version>12.6.2.x64</mssql-jdbc_auth.version>
+		<mssql-jdbc.version>12.6.2.jre8</mssql-jdbc.version>
+
+		<!-- Database dependencies, Snowflake
+			GovCloud:
+			https://gov.anypoint.mulesoft.com/exchange/com.mulesoft.connectors/mule4-snowflake-connector/
+			CloudHub:
+			https://anypoint.mulesoft.com/exchange/com.mulesoft.connectors/mule4-snowflake-connector
+
+			Driver: Stay on 3.12.X branch while finding a reason to upgrade or not getting patches anymore
+		-->
+		<mule4-snowflake-connector.version>1.1.2</mule4-snowflake-connector.version>
+		<snowflake-jdbc.version>3.13.34</snowflake-jdbc.version>
+
+		<!-- Salesforce
+			GovCloud:
+			https://maven.gov.anypoint.mulesoft.com/api/v2/maven/com/mulesoft/connectors/mule-salesforce-connector/maven-metadata.xml
+			https://maven.gov.anypoint.mulesoft.com/api/v2/maven/com/mulesoft/connectors/mule-sfdc-analytics-connector/maven-metadata.xml
+			CloudHub:
+			https://maven.anypoint.mulesoft.com/api/v3/maven/com/mulesoft/connectors/mule-salesforce-connector/maven-metadata.xml
+			https://maven.anypoint.mulesoft.com/api/v3/maven/com/mulesoft/connectors/mule-sfdc-analytics-connector/maven-metadata.xml
+		-->
+		<mule-salesforce-connector.version>10.20.0</mule-salesforce-connector.version>
+		<mule-sfdc-analytics-connector.version>3.16.0</mule-sfdc-analytics-connector.version>
+
+		<!-- Optional dependencies -->
+		<mule-email-connector.version>1.7.3</mule-email-connector.version>
+		<mule-scripting-module.version>2.1.0</mule-scripting-module.version>
+		<mule-ftp-connector.version>1.8.8</mule-ftp-connector.version>
+		<mule-sftp-connector.version>2.1.0</mule-sftp-connector.version>
+
+		<!-- Next property is used when deploying the parent pom file to Anypoint Exchange -->
+		<type>custom</type>
+    </properties>
+
+	<build>
+		<!-- Enable referencing of Maven properties in Mule config files -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/mule</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>${maven-clean-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven-resources-plugin.version}</version>
+				<configuration>
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>jks</nonFilteredFileExtension>
+						<nonFilteredFileExtension>cer</nonFilteredFileExtension>
+						<nonFilteredFileExtension>crt</nonFilteredFileExtension>
+						<nonFilteredFileExtension>p12</nonFilteredFileExtension>
+						<nonFilteredFileExtension>pem</nonFilteredFileExtension>
+						<nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+
+						<!-- Metrics Toolkit application-->
+						<nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+						<nonFilteredFileExtension>woff</nonFilteredFileExtension>
+						<nonFilteredFileExtension>eot</nonFilteredFileExtension>
+						<nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+
+						<!-- net-tools-api application-->
+						<nonFilteredFileExtension>jceks</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.mule.tools.maven</groupId>
+				<artifactId>mule-maven-plugin</artifactId>
+				<version>${mule-maven-plugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<classifier>mule-application-example</classifier>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mulesoft.munit.tools</groupId>
+				<artifactId>munit-maven-plugin</artifactId>
+				<version>${munit-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+							<goal>coverage-report</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<runtimeVersion>${app.runtime}</runtimeVersion>
+					<coverage>
+						<runCoverage>true</runCoverage>
+						<failBuild>true</failBuild>
+						<requiredApplicationCoverage>${codecoverage.application}</requiredApplicationCoverage>
+						<requiredResourceCoverage>${codecoverage.resource}</requiredResourceCoverage>
+						<requiredFlowCoverage>${codecoverage.flow}</requiredFlowCoverage>
+						<formats>
+							<format>sonar</format>
+							<format>json</format>
+							<format>html</format>
+						</formats>
+						<ignoreFiles>
+							<!-- Ignore reusable flows in project common-core (avoiding re-test) -->
+							<ignoreFile>global-error.xml</ignoreFile>
+						</ignoreFiles>
+					</coverage>
+				</configuration>
+			</plugin>
+
+			<!-- Enforce a specific maven version to compile and deploy projects -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>${maven-enforcer-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>enforce</id>
+						<configuration>
+							<rules>
+								<requireProfileIdsExist />
+								<requireMavenVersion>
+									<version>[3.9,4.0)</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- To deploy assets to Anypoint Exchange
+			Documentation:
+			- https://help.mulesoft.com/s/article/Correct-usage-of-Exchange-with-Maven
+			- https://anypoint.mulesoft.com/exchange/portals/anypoint-platform/f1e97bc6-315a-4490-82a7-23abe036327a.anypoint-platform/exchange-maven-facade-api-http/minor/3.0/pages/home/
+			- https://github.com/mulesoft-labs/exchange-documentation-samples
+			-->
+			<plugin>
+				<groupId>org.mule.tools.maven</groupId>
+				<artifactId>exchange-mule-maven-plugin</artifactId>
+				<version>${exchange-mule-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>exchange-pre-deploy</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>deploy</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>exchange-deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+                <inherited>false</inherited>
+			</plugin>
+            
+
+			<!-- ********************************************
+			Apache Maven Site Plugin - The Plugin is used to generate a site for the project
+			https://maven.apache.org/plugins//index.html
+
+			Usage: 
+			  Creates a project site in directory: ./target/site
+			  mvn site  (get all reports)
+
+			Related plugins:
+			- versions-maven-plugin: https://www.mojohaus.org/versions/versions-maven-plugin/index.html
+									 https://www.baeldung.com/maven-dependency-latest-version
+			- maven-project-info-reports-plugin: https://maven.apache.org/plugins/maven-site-plugin/examples/configuring-reports.html
+
+			versions-maven-plugin: Show the latest version of a dependency in maven repositories
+			Usage:
+			  mvn versions:display-property-updates
+			  mvn versions:display-plugin-updates 
+			  mvn versions:display-dependency-updates
+
+			********************************************-->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>${versions-maven-plugin.version}</version>
+
+				<configuration>
+					<!-- Ignore alpha and JDK 11 dependencies -->
+					<!-- Ignore rc (release candidate) for com.mulesoft -->
+					<ignoredVersions>.*-alpha.*,.*-beta*.*,.*jre11,.*-rc.*</ignoredVersions>
+					<ruleSet>
+						<rules>
+
+							<!-- Apache Derby: The latest version compatible with jdk8 is 10.14.* -->
+							<rule>
+								<groupId>org.mule.weave</groupId>
+								<ignoreVersions>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^1.4.0-rc1*</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^2.7.0-20240430*</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^2.7.0-SNAPSHOT*</version>
+									</ignoreVersion>
+								</ignoreVersions>
+								<comparisonMethod>maven</comparisonMethod>
+							</rule>
+
+							<!-- Apache Derby: The latest version compatible with jdk8 is 10.14.* -->
+							<rule>
+								<groupId>org.apache.derby</groupId>
+								<ignoreVersions>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^10.17.*</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^10.16.*</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^10.15.*</version>
+									</ignoreVersion>
+								</ignoreVersions>
+								<comparisonMethod>maven</comparisonMethod>
+							</rule>
+
+							<!-- Spring Framework. For Mule Runtime 4.4 must be in the 5.3.x version
+							     and Security on Spring Core 5.7.x  -->
+							<rule>
+								<groupId>org.springframework</groupId>
+								<ignoreVersions>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^6.*$</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^5.3.30</version>
+									</ignoreVersion>
+								</ignoreVersions>
+								<comparisonMethod>maven</comparisonMethod>
+							</rule>
+							<rule>
+								<groupId>org.springframework.security</groupId>
+								<ignoreVersions>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^6.*$</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^5.8.*$</version>
+									</ignoreVersion>
+								</ignoreVersions>
+								<comparisonMethod>maven</comparisonMethod>
+							</rule>
+
+							<!-- Log4j. Ignore beta releases -->
+							<rule>
+								<groupId>org.apache.logging.log4j</groupId>
+								<ignoreVersions>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^.*beta.*$</version>
+									</ignoreVersion>							
+								</ignoreVersions>
+								<comparisonMethod>maven</comparisonMethod>
+							</rule>
+
+							<!-- Logz.io. Must be JDK 8 compatible: 1.1.x, version 2.X is JDK 11 -->
+							<rule>
+								<groupId>io.logz</groupId>
+								<ignoreVersions>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^2.*$</version>
+									</ignoreVersion>
+								</ignoreVersions>
+								<comparisonMethod>maven</comparisonMethod>
+							</rule>
+
+							<!-- Snowflake. Stay on 3.12.X branch because it is getting security patches and is smaller than 3.14.X -->
+							<rule>
+								<groupId>net.snowflake</groupId>
+								<ignoreVersions>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^3.14.*$</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^3.15.*$</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^3.16.*$</version>
+									</ignoreVersion>							
+								</ignoreVersions>
+								<comparisonMethod>maven</comparisonMethod>
+							</rule>
+
+							<!-- Microsoft Sql Server. Ignore X86 architecture -->
+							<rule>
+								<groupId>com.microsoft.sqlserver</groupId>
+								<ignoreVersions>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^12.*.*.x86</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^12.*.*.x86-preview</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^12.*.*.x64-preview</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^12.*.*.jre8-preview</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^12.*.*.jre11-preview</version>
+									</ignoreVersion>
+									<ignoreVersion>
+										<type>regex</type>
+										<version>^12.7.0</version>
+									</ignoreVersion>
+								</ignoreVersions>
+								<comparisonMethod>maven</comparisonMethod>
+							</rule>
+
+						</rules>
+					</ruleSet>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>${maven-site-plugin.version}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${maven-project-info-reports-plugin.version}</version>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<!-- ********************************************************
+	Configure the reports created by the versions plugin
+	********************************************************-->
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>${versions-maven-plugin.version}</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>dependency-updates-report</report>
+							<report>plugin-updates-report</report>
+							<report>property-updates-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- Scripting module -->
+			<dependency>
+				<groupId>org.mule.modules</groupId>
+				<artifactId>mule-scripting-module</artifactId>
+				<version>${mule-scripting-module.version}</version>
+				<classifier>mule-plugin</classifier>
+			</dependency>
+
+			<!-- Mule extension that provides functionality to send and receive emails through POP3, IMAP and SMTP -->
+			<dependency>
+				<groupId>org.mule.connectors</groupId>
+				<artifactId>mule-email-connector</artifactId>
+				<classifier>mule-plugin</classifier>
+				<version>${mule-email-connector.version}</version>
+			</dependency>
+
+			<!-- Anypoint MQ -->
+			<dependency>
+				<groupId>com.mulesoft.connectors</groupId>
+				<artifactId>anypoint-mq-connector</artifactId>
+				<classifier>mule-plugin</classifier>
+				<version>${anypoint-mq-connector.version}</version>
+			</dependency>
+
+			<!-- FTP, SFTP connector -->
+			<dependency>
+				<groupId>org.mule.connectors</groupId>
+				<artifactId>mule-sftp-connector</artifactId>
+				<version>${mule-sftp-connector.version}</version>
+				<classifier>mule-plugin</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.mule.connectors</groupId>
+				<artifactId>mule-ftp-connector</artifactId>
+				<version>${mule-ftp-connector.version}</version>
+				<classifier>mule-plugin</classifier>
+			</dependency>
+
+			<!-- Salesforce connector -->
+			<dependency>
+				<groupId>com.mulesoft.connectors</groupId>
+				<artifactId>mule-salesforce-connector</artifactId>
+				<version>${mule-salesforce-connector.version}</version>
+				<classifier>mule-plugin</classifier>
+			</dependency>
+
+            <!-- Logging -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j-api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>${log4j-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>${log4j-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-layout-template-json</artifactId>
+				<version>${log4j-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.logz.log4j2</groupId>
+				<artifactId>logzio-log4j2-appender</artifactId>
+				<version>${logzio-log4j2-appender.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.logz.sender</groupId>
+				<artifactId>logzio-sender</artifactId>
+				<version>${logzio-sender.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.splunk.logging</groupId>
+				<artifactId>splunk-library-javalogging</artifactId>
+				<version>${splunk-library-javalogging.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+
+			<!-- Mule Metrics Toolkit Application -->
+			<dependency>
+				<groupId>com.mule.modules</groupId>
+				<artifactId>mule-custom-metrics-extension</artifactId>
+				<version>${mule-custom-metrics-extension.version}</version>
+				<classifier>mule-plugin</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.mule.connectors</groupId>
+				<artifactId>mule-file-connector</artifactId>
+				<version>${mule-file-connector.version}</version>
+				<classifier>mule-plugin</classifier>
+			</dependency>
+			<dependency>
+				<groupId>com.mulesoft.modules</groupId>
+				<artifactId>mule-secure-configuration-property-module</artifactId>
+				<version>${mule-secure-configuration-property-module.version}</version>
+				<classifier>mule-plugin</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.mule.connectors</groupId>
+				<artifactId>mule-objectstore-connector</artifactId>
+				<version>${mule-objectstore-connector.version}</version>
+				<classifier>mule-plugin</classifier>
+			</dependency>
+			<dependency>
+				<groupId>com.mulesoft.connectors</groupId>
+				<artifactId>mule-sfdc-analytics-connector</artifactId>
+				<version>${mule-sfdc-analytics-connector.version}</version>
+				<classifier>mule-plugin</classifier>
+			</dependency>
+
+			<!-- Database -->
+			<dependency>
+				<groupId>org.mule.connectors</groupId>
+				<artifactId>mule-db-connector</artifactId>
+				<version>${mule-db-connector.version}</version>
+				<classifier>mule-plugin</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.derby</groupId>
+				<artifactId>derby</artifactId>
+				<version>${derby.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-dbcp2</artifactId>
+				<version>${commons-dbcp2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.microsoft.sqlserver</groupId>
+				<artifactId>mssql-jdbc</artifactId>
+				<version>${mssql-jdbc.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.microsoft.sqlserver</groupId>
+				<artifactId>mssql-jdbc_auth</artifactId>
+				<version>${mssql-jdbc_auth.version}</version>
+				<type>dll</type>
+			</dependency>
+			<dependency>
+				<groupId>com.mulesoft.connectors</groupId>
+				<artifactId>mule4-snowflake-connector</artifactId>
+				<version>${mule4-snowflake-connector.version}</version>
+				<classifier>mule-plugin</classifier>
+			</dependency>
+			<dependency>
+				<groupId>net.snowflake</groupId>
+				<artifactId>snowflake-jdbc</artifactId>
+				<version>${snowflake-jdbc.version}</version>
+			</dependency>
+
+			<!-- Spring Framework -->
+			<dependency>
+				<groupId>org.mule.modules</groupId>
+				<artifactId>mule-spring-module</artifactId>
+				<version>${mule-spring-module.version}</version>
+				<classifier>mule-plugin</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${spring-security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-crypto</artifactId>
+				<version>${spring-security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${spring-security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${spring-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${spring-core.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- Mandatory dependencies for all projects -->
+
+		<!-- Mule connectors: HTTP, ApiKit, Secure properties, etc -->
+		<dependency>
+			<groupId>org.mule.connectors</groupId>
+			<artifactId>mule-http-connector</artifactId>
+			<version>${mule-http-connector.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-apikit-module</artifactId>
+			<version>${mule-apikit-module.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+
+        <!-- MUnit Dependencies -->
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-runner</artifactId>
+			<version>${munit-runner.version}</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-tools</artifactId>
+			<version>${munit-tools.version}</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.weave</groupId>
+			<artifactId>assertions</artifactId>
+			<version>${assertions.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-validation-module</artifactId>
+			<version>${mule-validation-module.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-tracing-module</artifactId>
+			<version>${mule-tracing-module.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+
+		<!-- 
+		Next repository provides the lastest connectors compatible with JDK 17 and 8:
+		- org.mule.connectors:mule-http-connector:jar:mule-plugin:1.9.3
+		- org.mule.modules:mule-apikit-module:jar:mule-plugin:1.10.4 
+		- org.mule.modules:mule-tracing-module:jar:mule-plugin:1.1.0 
+		
+		Remove the repository once the connectors are available in anypoint-exchange-v3
+
+		Review changes in:
+		https://maven.gov.anypoint.mulesoft.com/api/v3/maven/org/mule/connectors/mule-http-connector/maven-metadata.xml
+		https://maven.gov.anypoint.mulesoft.com/api/v3/maven/org/mule/modules/mule-apikit-module/maven-metadata.xml
+		https://maven.gov.anypoint.mulesoft.com/api/v3/maven/org/mule/modules/mule-tracing-module/maven-metadata.xml
+		-->
+		<repository>
+			<id>mulesoft-releases</id>
+			<name>mulesoft-releases</name>
+			<url>https://repository-master.mulesoft.org/releases/</url>
+		</repository>
+
+		<!--
+		The mule-apikit-module:jar:mule-plugin:1.10.4 requires next artifact:
+			com.github.everit-org.json-schema:org.everit.json.schema:jar:1.12.2
+		The next repository has the required library
+		
+		Note 2024-03-15: Review if future versions of apikit dont require anymore the json-schema
+		 -->
+		<repository>
+			<id>mulesoft-nexus-public</id>
+			<name>Mulesoft Nexus Public Repository</name>
+			<url>https://repository.mulesoft.org/nexus/content/repositories/public</url>
+			<layout>default</layout>
+		</repository>		
+
+		<!-- Splunk artifacts -->
+		<repository>
+			<id>splunk-artifactory</id>
+			<name>Splunk Releases</name>
+			<url>https://splunk.jfrog.io/splunk/ext-releases-local</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>mulesoft-releases</id>
+			<name>MuleSoft Releases Repository</name>
+			<layout>default</layout>
+			<url>https://repository.mulesoft.org/releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<!-- To deploy artifacts in Anypoint Organization Repository -->
+	<distributionManagement>
+		<repository>
+			<id>anypoint-exchange-v3</id>
+			<name>Assets for your anypoint organization</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v3/organizations/${project.groupId}/maven</url>
+
+            <!-- GovCloud 
+			<url>https://maven.gov.anypoint.mulesoft.com/api/v2/organizations/${project.groupId}/maven</url>
+            -->
+
+			<!-- MuleSoft EU Cloud
+			<url>https://maven.eu1.anypoint.mulesoft.com/api/v3/organizations/${project.groupId}/maven</url>
+			-->
+
+			<!-- Commercial version: CloudHub
+			<url>https://maven.anypoint.mulesoft.com/api/v3/organizations/${project.groupId}/maven</url>
+			-->
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
+</project>
