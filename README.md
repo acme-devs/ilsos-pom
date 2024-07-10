@@ -7,6 +7,7 @@ Parent POM for Mulesoft applications
 ## Table of contents
 1. [Description](#description)
 1. [Using the parent POM](#usinge-the-parent-pom)
+1. [Mulesoft Runtime release notes](#mulesoft-runtime-release-notes)
 1. [List of plugins and dependencies](#list-of-plugins-and-dependencies)
 1. [Recommended content](#recommended-content)
 
@@ -39,6 +40,28 @@ To use the parent POM in any of the child projects, specify the `parent` section
 ``` 
 
 Update the element `version` to match the latest release available.
+
+<br> 
+
+## Mulesoft Runtime release notes
+
+Mulesoft Runtime Documentation:
+
+* https://docs.mulesoft.com/release-notes/mule-runtime/mule-esb 
+* https://docs.mulesoft.com/release-notes/mule-runtime/mule-4.7.0-release-notes
+* https://docs.mulesoft.com/release-notes/mule-runtime/mule-4.6.0-release-notes
+
+Java Support
+
+* https://docs.mulesoft.com/general/java-support
+
+GovCloud Notes:
+
+* https://docs.mulesoft.com/release-notes/gov-cloud/gov-cloud-release-notes
+
+Mule Runtime Patch Update Release Notes for Mule Apps on Runtime Fabric
+
+* https://docs.mulesoft.com/release-notes/runtime-fabric/runtime-fabric-runtimes-release-notes
 
 <br> 
 

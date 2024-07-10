@@ -4,7 +4,7 @@
 
 	<groupId>0fa744b1-1284-46c5-b23c-0eb98ea787e3</groupId>
 	<artifactId>ilsos-pom</artifactId>
-	<version>1.0.19</version>
+	<version>1.0.20</version>
 	<packaging>pom</packaging>
 
 	<name>ilsos-pom</name>
@@ -20,21 +20,6 @@
 		<categories key="Asset Type">Configuration</categories>-->
 		<tags>POM, Configuration</tags>
 
-		<!--
-		Mulesoft Runtime Documentation:
-		https://docs.mulesoft.com/release-notes/mule-runtime/mule-esb 
-		https://docs.mulesoft.com/release-notes/mule-runtime/mule-4.7.0-release-notes
-		https://docs.mulesoft.com/release-notes/mule-runtime/mule-4.6.0-release-notes
-
-		Java Support
-		https://docs.mulesoft.com/general/java-support
-
-		GovCloud Notes:
-		https://docs.mulesoft.com/release-notes/gov-cloud/gov-cloud-release-notes
-
-		Mule Runtime Patch Update Release Notes for Mule Apps on Runtime Fabric
-		https://docs.mulesoft.com/release-notes/runtime-fabric/runtime-fabric-runtimes-release-notes
-		 -->
 		<app.runtime>4.7.1</app.runtime>
 
 		<!-- Code coverage settings -->
