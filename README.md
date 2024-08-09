@@ -1,5 +1,5 @@
 # ilsos-pom
-![Powered by](https://img.shields.io/badge/Powered%20by-Mulesoft-535597.svg)
+![Powered by](https://img.shields.io/badge/Powered%20by-Mulesoft-535597.svg) [![Build Status](https://dev.azure.com/ILSOSdevOps/ILSOSMuleSoft/_apis/build/status%2Filsos-pom?branchName=main)](https://dev.azure.com/ILSOSdevOps/ILSOSMuleSoft/_build/latest?definitionId=11&branchName=main)
 <br>
 
 Parent POM for Mulesoft applications 
@@ -202,4 +202,5 @@ The spring libraries are dependent on theMulesoft Runtime version, so they shoud
 * [How to deploy mule extension with pom hierarchy to exchange](https://help.mulesoft.com/s/article/How-to-deploy-mule-extension-with-pom-hierarchy-to-exchange)
 
 ---
+[GIT Commit Message Standard](https://github.com/ahmadawais/Emoji-Log)
 [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)

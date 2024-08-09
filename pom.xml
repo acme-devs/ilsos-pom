@@ -4,7 +4,7 @@
 
 	<groupId>0fa744b1-1284-46c5-b23c-0eb98ea787e3</groupId>
 	<artifactId>ilsos-pom</artifactId>
-	<version>1.0.28</version>
+	<version>1.0.31</version>
 	<packaging>pom</packaging>
 
 	<name>ilsos-pom</name>
@@ -196,7 +196,7 @@
 							<rules>
 								<requireProfileIdsExist />
 								<requireMavenVersion>
-									<version>[3.8.7,4.0)</version>
+									<version>[3.9,4.0)</version>
 								</requireMavenVersion>
 							</rules>
 						</configuration>
@@ -693,24 +693,6 @@
 			<classifier>mule-plugin</classifier>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.mule.weave</groupId>
-			<artifactId>assertions</artifactId>
-			<version>${assertions.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-validation-module</artifactId>
-			<version>${mule-validation-module.version}</version>
-			<classifier>mule-plugin</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-tracing-module</artifactId>
-  			<version>${mule-tracing-module.version}</version>
-			<classifier>mule-plugin</classifier>
-		</dependency>
 	</dependencies>
 
 
@@ -731,14 +713,6 @@
 			<url>https://repository.mulesoft.org/releases/</url>
 			<layout>default</layout>
 		</repository>
-
-		<!-- Splunk artifacts
-		<repository> 
-			<id>splunk-artifactory</id> 
-			<name>Splunk Releases</name> 
-			<url>https://splunk.jfrog.io/splunk/ext-releases-local</url>
-		</repository>
-		 -->
 	</repositories>
 
 	<pluginRepositories>

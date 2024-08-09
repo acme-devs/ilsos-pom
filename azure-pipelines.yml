@@ -1,0 +1,87 @@
+#trigger: 
+#- main
+# remove trigger for now to conserve agent time
+
+
+variables:
+  # Path where maven 3.9.8 will be extracted
+  mavenPath: '/home/vsts/work/_temp/mvn398'
+
+jobs:
+- job: build
+  displayName: Build Application
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+
+# Get the maven settings
+  - task: DownloadSecureFile@1
+    name: settingsFile
+    displayName: 'Get settings.xml'
+    inputs:
+      secureFile: 'settings.xml'
+    
+# Get the maven archive
+  - task: DownloadSecureFile@1
+    name: latestMaven
+    displayName: 'Get Maven 3.9.8'
+    inputs:
+      secureFile: 'apache-maven-3.9.8.zip'
+
+  - script: |
+      ls /
+    displayName: 'DEBUG: Print root'
+
+# Extract the archive to mavenPath
+  - task: ExtractFiles@1
+    inputs:
+      archiveFilePatterns: '$(latestMaven.secureFilePath)'
+      destinationFolder: $(mavenPath)
+      cleanDestinationFolder: true
+      overwriteExistingFiles: false
+
+# Change permissions to allow execution, since by default it's absent
+  - script: |
+      chmod u+x $(mavenPath)/bin/mvn
+    displayName: 'Add execution permission'
+
+  - script: |
+      ls $(mavenPath)
+      ls -avl $(mavenPath)/bin 
+    displayName: 'DEBUG: Print maven folder'
+
+  - script: |
+      cat $(settingsFile.secureFilePath)
+    displayName: 'DEBUG: Print settings v1'
+
+
+  - task: Maven@4
+    displayName: 'Compile/Package'
+    inputs:
+      mavenPomFile: 'pom.xml'
+      mavenOptions: '-Xmx3072m'
+      mavenVersionOption: 'Path'
+      mavenDirectory: $(mavenPath)
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      jdkArchitectureOption: 'x64'
+      goals: '--batch-mode -e -s $(settingsFile.secureFilePath) package'
+
+  - task: CmdLine@2
+    displayName: 'Update doc'
+    inputs:
+      script: |
+        echo "Update Anypoint Exchange documentation"
+        cp -Rfpv README.md exchange-docs/home.md
+
+  - task: Maven@4
+    displayName: 'Deploy to Exchange'
+    inputs:
+      mavenPomFile: 'pom.xml'
+      mavenOptions: '-Xmx3072m'
+      mavenVersionOption: 'Path'
+      mavenDirectory: $(mavenPath)
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      jdkArchitectureOption: 'x64'
+      goals: '--batch-mode -s $(settingsFile.secureFilePath) deploy'
